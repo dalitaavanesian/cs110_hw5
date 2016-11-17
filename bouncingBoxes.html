@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+  <canvas id="canvas" width="500" height="300"></canvas>
+
+  <script type='text/javascript'>
+    const myCanvas = document.getElementById("canvas");
+    const context = myCanvas.getContext("2d");
+    const NUM_POINTS = 5; // play with this after you finished implementing draw, it's fun :-)
+
+    // create points
+    const points = [];
+
+    for(let i = 0; i < NUM_POINTS; i++) {
+
+      points.push({
+
+        x: Math.random() * myCanvas.width,
+
+        y: Math.random() * myCanvas.height,
+
+        width: Math.random() * 10,
+
+        height: Math.random() * 10,
+
+        xDelta: 1, // the change that you will add to x, you can flip it when you get to the edge
+
+        yDelta: 1, // the change that you will add to y, you can flip it when you get to the edge
+
+        color: 'red'
+
+      });
+
+    }
+
+
+
+    const draw = function() {
+
+      // TODO: Put your code here
+      // 1. clear the original canvas
+      // 2. for each point
+      //      1. draw it
+      //      2. check if the point has gone beyond left or right part of the canvas - if so, flip xDelta
+      //      3. check if the point has gone beyond the top or bottom of the canvas - if so, flip the yDelta
+      //      4. add the point's xDelta and yDelta to the point's x and y
+
+      context.clearRect(0, 0, myCanvas.width, myCanvas.height);
+      points.forEach(function(point) {
+        context.fillStyle = point.color;
+        context.fillRect(point.x, point.y, point.width, point.height);
+
+        bounceX(point);
+        point.x += point.xDelta;
+        bounceY(point);
+        point.y += point.yDelta;
+      })
+
+    };
+
+    const bounceX = function(point) {
+      if(point.x + point.width >= myCanvas.width || point.x <= 0) {
+        point.xDelta = -point.xDelta;
+      }
+    }
+
+    const bounceY = function(point) {
+      if(point.y + point.height >= myCanvas.height || point.y <= 0) {
+        point.yDelta = -point.yDelta;
+      }
+    }
+
+    let animate = function() {
+
+      draw();
+
+      setTimeout(animate, 10);
+    };
+
+    animate();
+  </script>
+
+</body>
+</html>
